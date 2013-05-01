@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">faceLook</string>
+	<string name="capture">Capture</string>
+	<string name="edit">Edit</string>
+	<string name="save">Save</string>
+	<string name="back">Back</string>
+	<string name="gallery">Gallery</string>
+	<string name="crop">Crop</string>
+	<string name="picture">Picture</string>
+	<string name="title_activity_main">MainActivity</string>
+    <string name="LeftArrow">&lt;</string>
+    <string name="RightArrow">&gt;</string>
+    <string name="addString">Add Users</string>
+	
+</resources>

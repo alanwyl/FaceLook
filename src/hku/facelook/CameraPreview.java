@@ -7,30 +7,18 @@ import java.util.Date;
 import java.util.List;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.ImageFormat;
-import android.graphics.Paint;
-import android.graphics.Paint.Style;
-import android.graphics.PointF;
-import android.graphics.Rect;
-import android.graphics.YuvImage;
+import android.graphics.*;
 import android.hardware.Camera;
 import android.hardware.Camera.Size;
 import android.media.FaceDetector;
 import android.os.Environment;
 import android.util.Log;
 import android.view.*;
-import android.widget.Toast;
 
-/** A basic Camera preview class */
 public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback, Camera.PreviewCallback {
 	private SurfaceHolder mHolder;
     private Camera mCamera;
     
-    //from MonkeyCam
     private Bitmap mWorkBitmap;
     private FaceDetector mFaceDetector;
     private FaceDetector.Face[] mFaces = new FaceDetector.Face[16]; //max 64
@@ -42,14 +30,8 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     
     private Paint tmpPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private Paint textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    
-    
+        
     public boolean detected = false;
-    
-    
-//    private int picWidth, picHeight;
-//    private float ratio, xRatio, yRatio;
-    //-----MonkeyCam 
     
     private CanvasThread _thread;
     
@@ -213,9 +195,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
                 face.getMidPoint(eyesMP);
                 eyesDistance[i] = face.eyesDistance();
                 eyesMidPts[i] = eyesMP;
-                
-               
-                
+
                 //Toast.makeText(getContext(), "Face " + i + " detected", 50).show();
                 Log.i("Face",
                         i +  " " + face.confidence() + " " + face.eyesDistance() + " "
@@ -224,9 +204,6 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
                         + face.pose(FaceDetector.Face.EULER_Z) + ")"
                         + "Eyes Midpoint: ("+eyesMidPts[i].x + "," + eyesMidPts[i].y +")"
                 );
-                
-                
-                
             }
             catch (Exception e)
             {
@@ -256,80 +233,20 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 	        for (int i = 0; i < mFaces.length; i++){
 	            if (eyesMidPts[i] != null){
 	            	count++;
-//	                ratio = eyesDistance[i] * 4.0f / picWidth;
-//	                RectF scaledRect = new RectF((eyesMidPts[i].x - picWidth * ratio / 2.0f) * xRatio,
-//	                                             (eyesMidPts[i].y - picHeight * ratio / 2.0f) * yRatio,
-//	                                             (eyesMidPts[i].x + picWidth * ratio / 2.0f) * xRatio,
-//	                                             (eyesMidPts[i].y + picHeight * ratio / 2.0f) * yRatio);
-//	                canvas.drawBitmap(mMonkeyImage, null, scaledRect, tmpPaint);
-	                
-//	                canvas.drawRect((int) (eyesMidPts[i].x - eyesDistance[i] * 2),
-//			                		(int) (eyesMidPts[i].y - eyesDistance[i] * 2),
-//			                		(int) (eyesMidPts[i].x + eyesDistance[i] * 2),
-//			                		(int) (eyesMidPts[i].y + eyesDistance[i] * 2),
-//			                		tmpPaint);
-//	                
-	            	
+
 	                int left = (int) (eyesMidPts[i].x - eyesDistance[i]);
 	                int top = (int) (eyesMidPts[i].y - eyesDistance[i]);
 	                int right = (int) (eyesMidPts[i].x + eyesDistance[i]);
 	                int bottom = (int) (eyesMidPts[i].y + 1.5 * eyesDistance[i]);
-	                
-	                
 
 	                Log.i("Preview", left+" "+top+" "+right+" "+bottom);
 	                
-	                canvas.drawRect(left,top,right,bottom,tmpPaint);
-	            	
-	                
-	            	
-
+	                canvas.drawRect(left, top, right, bottom, tmpPaint);
 	            }
-	        }
+	        }        
 	        
-	        
-	        canvas.drawText(count + " faces " + FaceLook.rec, 200, 40, textPaint);
+	        canvas.drawText(count + " faces ", 200, 40, textPaint);
     	}
     	
     }
-	
-	
-	
-	boolean crop = false;
-	
-	public void crop(){
-		crop = true;
-        //testing
-        //TODO: enhance this 
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());    	
-    	String mPath = Environment.getExternalStorageDirectory().toString() + "/" + "SceenCrop_" + timeStamp + ".jpg";
-    	
-    	View v1 = this.getRootView();
-    	//View v1 = mCurrentUrlMask.getRootView();
-    	v1.setDrawingCacheEnabled(true);
-    	Bitmap bitmap = v1.getDrawingCache();
-    	int x = v1.getWidth()/10;
-    	int y = v1.getHeight()/10;
-    	int width = bitmap.getWidth() - 5*x;
-    	int height = bitmap.getHeight() - 5*y;
-    	bitmap = Bitmap.createBitmap(bitmap, x, y, width, height);
-    	v1.setDrawingCacheEnabled(false);
-    	
-    	OutputStream fout = null;
-    	File imageFile = new File(mPath);
-    	
-    	try{
-    		fout = new FileOutputStream(imageFile);
-    		bitmap.compress(Bitmap.CompressFormat.JPEG, 90, fout);
-    		fout.flush();
-    		fout.close();
-    	} catch (FileNotFoundException e){
-    		e.printStackTrace();
-    	} catch (IOException e){
-    		e.printStackTrace();
-    	}
-    	//testing end here
-	}
-	
-	
 }

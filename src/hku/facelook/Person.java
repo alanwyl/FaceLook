@@ -2,7 +2,7 @@ package hku.facelook;
 
 public class Person {
 	private int id;
-	private String name,mobile, email;
+	private String name, mobile, email;
 	private String vector;
 	
 	public Person(int id, String vector){

@@ -11,8 +11,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import android.app.Activity;
-import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -24,9 +22,7 @@ import android.hardware.Camera.PictureCallback;
 import android.hardware.Camera.Size;
 import android.media.FaceDetector;
 import android.net.Uri;
-import android.os.Bundle;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.view.*;
 import android.widget.*;
 
@@ -38,11 +34,9 @@ public class FaceLook extends Activity {
 	private Camera.Parameters cp;
 	private List<Size> supportedSize;
 	public static final int MEDIA_TYPE_IMAGE = 1;
-	private Button captureButton, backButton, recButton, saveButton;
-	private Bitmap sourceBitmap, scaledBitmap;
+	private Button captureButton, backButton, saveButton;
+	private Bitmap sourceBitmap;
 	public static Bitmap[] tempFaces;
-	private static final int REQUEST_CODE = 0;
-	public static boolean rec = false;
 
 	public int screenWidth, screenHeight, cameraWidth, cameraHeight;
 
@@ -53,26 +47,12 @@ public class FaceLook extends Activity {
 	public void editButtonsToggle(boolean visible){
 		if (visible){
 			captureButton.setVisibility(View.GONE);
-//			saveButton.setVisibility(View.GONE);
 			saveButton.setVisibility(View.VISIBLE);
-
 			backButton.setVisibility(View.VISIBLE);
-
 		} else {
 			captureButton.setVisibility(View.VISIBLE);
 			saveButton.setVisibility(View.GONE);
 			backButton.setVisibility(View.GONE);
-		}
-	}
-
-	public boolean dispatchKeyEvent(KeyEvent event){
-		switch(event.getKeyCode()){
-		case KeyEvent.KEYCODE_VOLUME_DOWN:
-		case KeyEvent.KEYCODE_VOLUME_UP:
-			capture();
-			return true;
-		default:
-			return super.dispatchKeyEvent(event);
 		}
 	}
 
@@ -89,8 +69,6 @@ public class FaceLook extends Activity {
 							}
 						}
 				);
-				
-
 			}
 		});
 	}
@@ -98,8 +76,12 @@ public class FaceLook extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
-		super.onCreate(savedInstanceState);
+		super.onCreate(savedInstanceState);	
 
+		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+		setContentView(R.layout.activity_face_look);
+		
 		Display display = getWindowManager().getDefaultDisplay();
 		Point size = new Point();
 		display.getSize(size);
@@ -107,10 +89,6 @@ public class FaceLook extends Activity {
 		screenHeight = size.y;
 
 		Log.i("FaceLook", "Screen Width: "+screenWidth + " Screen Height: "+screenHeight);
-
-		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-		setContentView(R.layout.activity_face_look);
 
 		if (this.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)){
 			try{
@@ -133,7 +111,7 @@ public class FaceLook extends Activity {
 			mPreview = new CameraPreview(this, mCamera);
 			FrameLayout preview = (FrameLayout) findViewById(R.id.camera_preview);
 			preview.addView(mPreview);
-			//setContentView(mPreview);
+			// setContentView(mPreview);
 		}		
 
 		captureButton = (Button) findViewById(R.id.button_capture);
@@ -147,7 +125,6 @@ public class FaceLook extends Activity {
 					}
 				}
 		);
-
 
 		backButton = (Button) findViewById(R.id.button_back);
 		backButton.setOnClickListener(
@@ -168,18 +145,7 @@ public class FaceLook extends Activity {
 						save();
 					}
 				}
-				);
-
-
-		recButton = (Button) findViewById(R.id.button_rec);
-		recButton.setOnClickListener(
-				new View.OnClickListener(){
-					@Override
-					public void onClick(View v){
-						rec = true;
-					}
-				}
-				);
+		);
 
 		editButtonsToggle(false);
 	}
@@ -300,10 +266,6 @@ public class FaceLook extends Activity {
 			sourceBitmap.recycle();
 
 			calculateVector(croppedFaces);
-			
-			if (rec){
-				matching();
-			}
 		}
 	}
 
@@ -311,8 +273,6 @@ public class FaceLook extends Activity {
 	public void calculateVector(Bitmap[] bitmapFaces){
 		Log.i("FaceLook", "Number of faces detected: "+ bitmapFaces.length);
 
-		String output = "";
-		
 		for (int i=0; i<bitmapFaces.length; i++){
 			Calculation.HistogramReset();
 			Calculation.featureVectorExtraction(bitmapFaces[i]);
@@ -330,37 +290,6 @@ public class FaceLook extends Activity {
 		
 		finish();
 	}
-	
-	private List<Person> loadFromFile(){
-		List<Person> persons = new ArrayList<Person>();
-
-		String line = "";
-		String ret = "";
-		try {
-			InputStream in = openFileInput("datafff.txt");
-			if (in != null) {
-				InputStreamReader input = new InputStreamReader(in);
-				BufferedReader bufferedreader = new BufferedReader(input);
-				while (( line = bufferedreader.readLine()) != null) {
-					String[] lines = line.split("\t");
-					persons.add(new Person(Integer.parseInt(lines[0]),lines[1]));
-
-					line += ret + '\n';
-				}
-				in.close();
-			}
-		} catch(Exception e){
-			e.printStackTrace();
-		}
-
-		return persons;
-	}
-
-
-	public static void setRec(boolean x){
-		rec = x;
-	}
-
 
 	public static String convertArrayToString(int[] array){
 		String str = "";
@@ -604,12 +533,8 @@ public class FaceLook extends Activity {
 				"\n\n" +
 				"\nNearest Match Found : \nRow ID = " + (foundMatch) + " :ChiSquare Value : "+ chiSquareArray[foundMatch] +
 				"\n Name: " +name);
-
-
-
-		FaceLook.setRec(false);
-
 	}
+	
 	public static int[] convertStringToArray(String str){
 		String[] arr = str.split(",");
 

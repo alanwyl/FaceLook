@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -16,8 +17,9 @@ public class PicturePrint extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_picture);
-
+		
 		Intent intent = getIntent();
 		final String vector = intent.getStringExtra("vector");
 		int i = intent.getIntExtra("i", 0);
@@ -27,7 +29,6 @@ public class PicturePrint extends Activity {
 		ImageView imageview = (ImageView) findViewById (R.id.imageView2);
 		imageview.setImageBitmap(bm);
 		
-		//buttons onclick
 		addImageButton = (ImageButton) findViewById(R.id.imageButton_add);
 		addImageButton.setOnClickListener(new OnClickListener() {
 			@Override

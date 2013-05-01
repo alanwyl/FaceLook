@@ -45,17 +45,14 @@ public class SearchActivity extends Activity {
 		Intent intent = getIntent();
 		final String vector = intent.getStringExtra("vector");
 
-		ImageView imageview = (ImageView) findViewById (R.id.imageView1);
+//		ImageView imageview = (ImageView) findViewById (R.id.imageView1);
 //		imageview.setImageBitmap(bm);
-
 
 		nameTextView = (TextView) findViewById (R.id.textview_name);
 		mobileTextView = (TextView) findViewById (R.id.textview_mobile);
 		emailTextView = (TextView) findViewById (R.id.textview_email);
 		
-
 		int resultId = matching(vector);
-
 
 		String line = "";
 		String ret = "";
@@ -71,13 +68,11 @@ public class SearchActivity extends Activity {
 						lines = ret.split("\t");
 						nameTextView.setText(lines[1]);
 						mobileTextView.setText(lines[2]);
-						emailTextView.setText(lines[3]);
-						
+						emailTextView.setText(lines[3]);						
 						
 						nameStr = lines[1];
 						mobileStr = lines[2];
-						emailStr = lines[3];
-						
+						emailStr = lines[3];						
 						
 						Log.i("FaceLook", "ret: " + ret);
 						Log.i("FaceLook", "line: " + line);
@@ -92,8 +87,7 @@ public class SearchActivity extends Activity {
 			}
 		} catch(Exception e){
 			e.printStackTrace();
-		}
-		
+		}		
 
 		phoneImageButton = (ImageButton) findViewById(R.id.imageButton_phone);
 		phoneImageButton.setOnClickListener(
@@ -128,17 +122,10 @@ public class SearchActivity extends Activity {
 	       						 "&body=" + Uri.encode("Hi "+ nameStr +", I'm using FaceLook! It's cool!");
 	       				 Uri uri = Uri.parse(uriText);
 	       				 intent.setData(uri);
-	       				 
-//	       				 intent.putExtra(Intent.EXTRA_EMAIL, emailStr);
-//	       				 intent.putExtra(Intent.EXTRA_SUBJECT, "FaceLook want to say Hi!");
-//	       				 intent.putExtra(Intent.EXTRA_TEXT, "Hi "+ nameStr +", I'm using FaceLook! It's cool!");
-//	       				 
 	       				 Log.i("email", "emailStr: "+ emailStr);
 						
-	       				 try
-	       				 {
+	       				 try{
 	       					startActivity(intent);
-//	       					startActivity(Intent.createChooser(intent, "Send mail..."));
 	       				 }
 	       				 catch(android.content.ActivityNotFoundException e)
 	       				 {
@@ -156,18 +143,8 @@ public class SearchActivity extends Activity {
 						finish();
 					}
 				}
-				);
-		
-		
-
-
+		);
 	}
-
-
-
-
-
-
 
 	public int matching(String vector){
 		int count=0,start=0,end = 0;
@@ -195,16 +172,10 @@ public class SearchActivity extends Activity {
 			e.printStackTrace();
 		}
 
-
-
-		//			lbp.open();
 		count = persons.size();
-		//			System.out.println(count);
 		double chiSquareArray[] = new double[count];
 
-		for(int i=0;i<count;i++)
-		{
-			//				Hist2String = lbp.getUri(i+1);
+		for(int i=0;i<count;i++){
 			Hist2String = persons.get(i).getVector();
 
 			convertStringToArray(Hist2String);
@@ -215,16 +186,13 @@ public class SearchActivity extends Activity {
 			double temp2;
 			start=0;
 			end=0;
-			for(int k=0;k<2;k++)
-			{
+			for(int k=0;k<2;k++){
 				start=end;
 				end=end+256;
-				for(int j=start;j<end;j++)
-				{
+				for(int j=start;j<end;j++){
 					if(hist[j] == 0 && Calculation.Histogram[j] == 0)
 						continue;
-					else
-					{
+					else{
 						temp = hist[j]-Calculation.Histogram[j];
 						temp = temp*temp;
 						temp1 = hist[j]+Calculation.Histogram[j];
@@ -234,12 +202,10 @@ public class SearchActivity extends Activity {
 				}
 				start=end;
 				end=end+118;
-				for(int j=start;j<end;j++)
-				{
+				for(int j=start;j<end;j++){
 					if(hist[j] == 0 && Calculation.Histogram[j] == 0)
 						continue;
-					else
-					{
+					else{
 						temp = hist[j]-Calculation.Histogram[j];
 						temp = temp*temp;
 						temp1 = hist[j]+Calculation.Histogram[j];
@@ -250,12 +216,10 @@ public class SearchActivity extends Activity {
 
 				start=end;
 				end=end+118;
-				for(int j=start;j<end;j++)
-				{
+				for(int j=start;j<end;j++){
 					if(hist[j] == 0 && Calculation.Histogram[j] == 0)
 						continue;
-					else
-					{
+					else{
 						temp = hist[j]-Calculation.Histogram[j];
 						temp = temp*temp;
 						temp1 = hist[j]+Calculation.Histogram[j];
@@ -268,12 +232,10 @@ public class SearchActivity extends Activity {
 
 				start=end;
 				end=end+118;
-				for(int j=start;j<end;j++)
-				{
+				for(int j=start;j<end;j++){
 					if(hist[j] == 0 && Calculation.Histogram[j] == 0)
 						continue;
-					else
-					{
+					else{
 						temp = hist[j]-Calculation.Histogram[j];
 						temp = temp*temp;
 						temp1 = hist[j]+Calculation.Histogram[j];
@@ -287,8 +249,7 @@ public class SearchActivity extends Activity {
 
 				start=end;
 				end=end+236;
-				for(int j=start;j<end;j++)
-				{
+				for(int j=start;j<end;j++){
 					if(hist[j] == 0 && Calculation.Histogram[j] == 0)
 						continue;
 					else
@@ -302,8 +263,7 @@ public class SearchActivity extends Activity {
 				}
 				start=end;
 				end=end+59;
-				for(int j=start;j<end;j++)
-				{
+				for(int j=start;j<end;j++){
 					if(hist[j] == 0 && Calculation.Histogram[j] == 0){
 						continue;
 					} else{
@@ -316,12 +276,10 @@ public class SearchActivity extends Activity {
 				}
 				start=end;
 				end=end+118;
-				for(int j=start;j<end;j++)
-				{
+				for(int j=start;j<end;j++){
 					if(hist[j] == 0 && Calculation.Histogram[j] == 0)
 						continue;
-					else
-					{
+					else{
 						temp = hist[j]-Calculation.Histogram[j];
 						temp = temp*temp;
 						temp1 = hist[j]+Calculation.Histogram[j];
@@ -331,12 +289,10 @@ public class SearchActivity extends Activity {
 				}
 				start=end;
 				end=end+59;
-				for(int j=start;j<end;j++)
-				{
+				for(int j=start;j<end;j++){
 					if(hist[j] == 0 && Calculation.Histogram[j] == 0)
 						continue;
-					else
-					{
+					else{
 						temp = hist[j]-Calculation.Histogram[j];
 						temp = temp*temp;
 						temp1 = hist[j]+Calculation.Histogram[j];
@@ -349,8 +305,7 @@ public class SearchActivity extends Activity {
 
 				start=end;
 				end=end+118;
-				for(int j=start;j<end;j++)
-				{
+				for(int j=start;j<end;j++){
 					if(hist[j] == 0 && Calculation.Histogram[j] == 0)
 						continue;
 					else
@@ -366,7 +321,6 @@ public class SearchActivity extends Activity {
 				end=end+59;
 			}
 			chiSquareArray[i]=chiSquare;
-			//			Log.d(TAG, "" +chiSquare);
 		}
 
 		for(int i=0;i<chiSquareArray.length;i++){
@@ -377,7 +331,6 @@ public class SearchActivity extends Activity {
 				foundMatch  = i;
 		}
 
-		
 		Log.i("FaceLook", "foundMatch: "+ foundMatch);
 		
 //		String name = new Integer(persons.get(foundMatch).getId()).toString();
@@ -388,11 +341,7 @@ public class SearchActivity extends Activity {
 //				"\nNearest Match Found : \nRow ID = " + (foundMatch) + " :ChiSquare Value : "+ chiSquareArray[foundMatch] +
 //				"\n Name: ");
 		//TODO: enhance this
-
-
 		return foundMatch;
-
-
 	}
 
 	public static int[] convertStringToArray(String str){

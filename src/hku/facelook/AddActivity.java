@@ -5,20 +5,15 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 public class AddActivity extends Activity {
 //	private Bitmap bm = FaceLook.tempFaces[0];	
@@ -35,9 +30,8 @@ public class AddActivity extends Activity {
 		Intent intent = getIntent();
 		final String vector = intent.getStringExtra("vector");
 		
-		ImageView imageview = (ImageView) findViewById (R.id.imageView1);
+//		ImageView imageview = (ImageView) findViewById (R.id.imageView1);
 //		imageview.setImageBitmap(bm);
-
 
 		nameEditText = (EditText) findViewById (R.id.edittext_name);
 		mobileEditText = (EditText) findViewById (R.id.edittext_mobile);
@@ -99,7 +93,7 @@ public class AddActivity extends Activity {
 						finish();
 					}
 				}
-				);
+		);
 
 	}
 
